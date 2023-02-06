@@ -27,6 +27,10 @@
       textarea {
         resize: none;
       }
+
+      [v-cloak] {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -53,6 +57,7 @@
                 v-for="product in products"
                 :key="product.id"
                 class="text-center align-middle"
+                v-cloak
               >
                 <td>
                   <img
@@ -76,7 +81,13 @@
                       @click="showMore(product.id)"
                       :disabled="isWaiting"
                     >
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" class="text-success" v-show="isWaiting"></span>
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                        class="text-success"
+                        v-show="isWaiting"
+                      ></span>
                       查看更多
                     </button>
                     <button
@@ -85,7 +96,13 @@
                       @click="addCart(product.id)"
                       :disabled="isWaiting"
                     >
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" class="text-primary" v-show="isWaiting"></span>
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                        class="text-primary"
+                        v-show="isWaiting"
+                      ></span>
                       加入購物車
                     </button>
                   </div>
@@ -98,7 +115,11 @@
         <!-- 購物車 -->
         <div class="row mt-4">
           <div class="d-flex justify-content-between align-items-center px-0">
-            <h2 class="text-danger fw-bolder border-start border-danger ps-2 border-4 py-1">購物車</h2>
+            <h2
+              class="text-danger fw-bolder border-start border-danger ps-2 border-4 py-1"
+            >
+              購物車
+            </h2>
             <button type="button" class="btn btn-danger" @click="clearCart">
               清空購物車
             </button>
@@ -113,7 +134,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="cart in carts" :key="cart.id" class="align-middle">
+              <tr v-for="cart in carts" :key="cart.id" class="align-middle" v-cloak>
                 <td>
                   <button
                     type="button"
@@ -134,7 +155,9 @@
                   />
                   {{cart.product.unit}}
                 </td>
-                <td class="text-end">{{ showThousandths(cart.product.price * cart.qty) }}</td>
+                <td class="text-end">
+                  {{ showThousandths(cart.product.price * cart.qty) }}
+                </td>
               </tr>
             </tbody>
             <tfoot v-show="totalPrice > 0">
@@ -147,9 +170,16 @@
           <hr />
           <div class="row mt-4">
             <div class="col-6 offset-3">
-              <v-form v-slot="{ errors }" @submit="onSubmit(errors)" class="mb-4" ref="form">
+              <v-form
+                v-slot="{ errors }"
+                @submit="onSubmit(errors)"
+                class="mb-4"
+                ref="form"
+              >
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email<span class="text-danger ms-1">*</span></label>
+                  <label for="email" class="form-label"
+                    >Email<span class="text-danger ms-1">*</span></label
+                  >
                   <v-field
                     type="email"
                     id="email"
@@ -166,7 +196,9 @@
                   ></error-message>
                 </div>
                 <div class="mb-3">
-                  <label for="name" class="form-label">收件人姓名<span class="text-danger ms-1">*</span></label>
+                  <label for="name" class="form-label"
+                    >收件人姓名<span class="text-danger ms-1">*</span></label
+                  >
                   <v-field
                     type="text"
                     class="form-control"
@@ -183,7 +215,9 @@
                   ></error-message>
                 </div>
                 <div class="mb-3">
-                  <label for="tel" class="form-label">收件人電話<span class="text-danger ms-1">*</span></label>
+                  <label for="tel" class="form-label"
+                    >收件人電話<span class="text-danger ms-1">*</span></label
+                  >
                   <v-field
                     type="tel"
                     class="form-control"
@@ -200,7 +234,9 @@
                   ></error-message>
                 </div>
                 <div class="mb-3">
-                  <label for="address" class="form-label">收件人地址<span class="text-danger ms-1">*</span></label>
+                  <label for="address" class="form-label"
+                    >收件人地址<span class="text-danger ms-1">*</span></label
+                  >
                   <v-field
                     type="text"
                     class="form-control"
@@ -230,7 +266,13 @@
                   ></v-field>
                 </div>
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary" :disabled="!carts.length">送出訂單</button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    :disabled="!carts.length"
+                  >
+                    送出訂單
+                  </button>
                 </div>
               </v-form>
             </div>
@@ -247,7 +289,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
             <div class="modal-header bg-info">
-              <h1 class="modal-title fs-5" id="infoModalLabele" class="fw-bolder" style="letter-spacing: .125rem">{{ info.title }}</h1>
+              <h1 class="modal-title fs-5 fw-bolder" id="infoModalLabele" style="letter-spacing: .125rem">{{ info.title }}</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
