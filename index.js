@@ -1,6 +1,7 @@
 const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
 const { required, email, min } = VeeValidateRules;
 const { localize, loadLocaleFromURL } = VeeValidateI18n;
+const { LoadingPlugin, Component } = VueLoading;
 
 // define global rules
 defineRule('required', required);
@@ -101,7 +102,7 @@ const app = Vue.createApp({
       }
       this.isWaiting = true;
       // 如果數字被改到小於1，則變成1
-      if(!Number(e.target.value)) {
+      if (!Number(e.target.value)) {
         this.carts[this.carts.findIndex(item => item.id === id)].qty = 1;
         data.qty = 1;
       } else {
@@ -125,7 +126,7 @@ const app = Vue.createApp({
     },
     onSubmit() {
       if (confirm('確認送出訂單?')) {
-        axios.post(`https://vue3-course-api.hexschool.io/v2/api/week3-backend/order`,{ data: this.orderForm })
+        axios.post(`https://vue3-course-api.hexschool.io/v2/api/week3-backend/order`, { data: this.orderForm })
           .then((res) => {
             alert('訂單已送出!!');
             const orderId = res.data.order_Id;
@@ -167,13 +168,27 @@ const app = Vue.createApp({
     }
   },
   mounted() {
+    let loader = this.$loading.show({
+      // Optional parameters
+      container: null,
+      canCancel: false,
+      color: '#e22163',
+      loader: 'bars',
+      'lock-scroll': true,
+      blur: '2px',
+      height: 65,
+      width: 95
+    });
     const getProducts = () => axios.get(`${apiUrl}/api/${apiPath}/products/all`);
     const getCarts = () => axios.get(`${apiUrl}/api/${apiPath}/cart`);
     axios.all([getProducts(), getCarts()])
       .then(
         axios.spread((acct, perms) => {
-          this.products = acct.data.products;
-          this.carts = perms.data.data.carts;
+          setTimeout(() => {
+            this.products = acct.data.products;
+            this.carts = perms.data.data.carts;
+            loader.hide();
+          }, 2000);
         })
       )
       .catch(err => console.error(err));
@@ -185,5 +200,8 @@ const app = Vue.createApp({
     ErrorMessage,
   }
 })
+
+app.use(LoadingPlugin);
+app.component('loading', Component);
 
 app.mount('#app');
